@@ -444,10 +444,8 @@ class ilTrQuery
             " ut_lp_marks.obj_id = object_data.obj_id)" .
             " WHERE " . $ilDB->in("object_data.obj_id", $objects["object_ids"], false, "integer") .
             self::buildFilters(array(), $a_filters);
-
         $queries = array();
         $queries[] = array("fields" => $fields, "query" => $query);
-
         if (!in_array($a_order_field, $fields)) {
             $a_order_field = "title";
         }
@@ -460,7 +458,7 @@ class ilTrQuery
             foreach ($result["set"] as $idx => $item) {
                 if ($item["type"] == "sess") {
                     $session = $sessions[$item["obj_id"]];
-                    $result["set"][$idx]["title"] = $session["title"];
+                    $result["set"][$idx]["title"] = $session["title"].": ".$item['title'];
                     $result["set"][$idx]["sort_title"] = $session["e_start"];
                     // $result["set"][$idx]["status"] = (int)$session["status"];
                 }

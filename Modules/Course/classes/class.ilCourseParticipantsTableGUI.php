@@ -409,6 +409,12 @@ class ilCourseParticipantsTableGUI extends ilParticipantTableGUI
 
             $usr_data_fields[] = $field;
         }
+        $active;
+        if($this->current_filter['active'] == true){
+            $active = "active";
+        }else{
+            $active = "both";
+        }
 
         $usr_data = ilUserQuery::getUserListData(
             '',
@@ -416,7 +422,7 @@ class ilCourseParticipantsTableGUI extends ilParticipantTableGUI
             0,
             9999,
             $this->current_filter['login'],
-            '',
+            $active,
             null,
             false,
             false,

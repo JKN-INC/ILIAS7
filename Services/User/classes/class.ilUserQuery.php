@@ -380,7 +380,7 @@ class ilUserQuery
         }
         
         if ($this->activation != "") {		// activation
-            if ($this->activation == "inactive") {
+            if ($this->activation === "inactive") {
                 $add = $where . " usr_data.active = " . $ilDB->quote(0, "integer") . " ";
             } else {
                 $add = $where . " usr_data.active = " . $ilDB->quote(1, "integer") . " ";

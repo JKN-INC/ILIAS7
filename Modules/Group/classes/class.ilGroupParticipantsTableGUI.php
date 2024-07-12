@@ -322,11 +322,6 @@ class ilGroupParticipantsTableGUI extends ilParticipantTableGUI
             $usr_data_fields[] = $field;
         }
 
-        $active;
-        if($this->current_filter['active'] == true){
-            $active = "active";
-        }
-
         $usr_data = ilUserQuery::getUserListData(
             '',
             '',

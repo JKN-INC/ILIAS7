@@ -315,6 +315,15 @@ class ilTrObjectUsersPropsTableGUI extends ilLPTableBaseGUI
                     break;
             }
         }
+
+        $active = $this->addFilterItemByMetaType(
+            'active',
+            ilTable2GUI::FILTER_CHECKBOX,
+            false,
+            $lng->txt('active_filter')
+        );
+
+        $this->filter['active'] = $active->getChecked();
     }
     
     /**

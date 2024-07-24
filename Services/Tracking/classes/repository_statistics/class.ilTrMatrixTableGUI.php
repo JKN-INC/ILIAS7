@@ -133,6 +133,15 @@ class ilTrMatrixTableGUI extends ilLPTableBaseGUI
             $this->filter["name"] = null;
             $this->SetFilterValue($item, null);
         }
+
+        $active = $this->addFilterItemByMetaType(
+            'active',
+            ilTable2GUI::FILTER_CHECKBOX,
+            false,
+            $lng->txt('active_filter')
+        );
+
+        $this->filter['active'] = $active->getChecked();
     }
 
     public function getSelectableColumns()
@@ -273,7 +282,7 @@ class ilTrMatrixTableGUI extends ilLPTableBaseGUI
                 }
             }
         
-            $data = ilTrQuery::getUserObjectMatrix($this->ref_id, $collection["object_ids"], $this->filter["name"], $a_user_fields, $a_privary_fields, $check_agreement);
+            $data = ilTrQuery::getUserObjectMatrix($this->ref_id, $collection["object_ids"], $this->filter["name"], $this->filter["active"], $a_user_fields, $a_privary_fields, $check_agreement);
             if ($collection["objectives_parent_id"] && $data["users"]) {
                 // sub-items: learning objectives
                 $objectives = ilTrQuery::getUserObjectiveMatrix($collection["objectives_parent_id"], $data["users"]);

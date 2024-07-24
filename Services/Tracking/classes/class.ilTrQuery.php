@@ -276,7 +276,6 @@ class ilTrQuery
             " AND ut_lp_marks.obj_id = " . $ilDB->quote($obj_id, "integer") . ")" .
             " LEFT JOIN usr_pref ON (usr_pref.usr_id = usr_data.usr_id AND keyword = " . $ilDB->quote("language", "text") . ")" .
             self::buildFilters($where, $a_filters);
-
         $queries = array(array("fields" => $fields, "query" => $query));
     
         // #9598 - if language is not in fields alias is missing
@@ -959,7 +958,10 @@ class ilTrQuery
                     case "title":
                         $where[] = $ilDB->like("usr_data." . $id, "text", "%" . $value . "%");
                         break;
-                    
+                    case "active":
+                        if($value === 1 || $value === true){
+                            $where[] = "active = " . $ilDB->quote(1, 'integer');
+                        }
                     case "gender":
                     case "zipcode":
                     case "sel_country":
@@ -1392,6 +1394,7 @@ class ilTrQuery
      * @param	int		$a_parent_ref_id
      * @param	array	$a_obj_ids
      * @param	string	$a_user_filter
+     * @param string  $a_active_filter
      * @param	array	$a_additional_fields
      * @param	array	$a_privacy_fields
      * @param	int		$a_check_agreement
@@ -1401,6 +1404,7 @@ class ilTrQuery
         $a_parent_ref_id,
         $a_obj_ids,
         $a_user_filter = null,
+        $a_active_filter = null,
         array $a_additional_fields = null,
         array $a_privacy_fields = null,
         $a_check_agreement = null
@@ -1415,6 +1419,9 @@ class ilTrQuery
             $where[] = "usr_data.usr_id <> " . $ilDB->quote(ANONYMOUS_USER_ID, "integer");
             if ($a_user_filter) {
                 $where[] = $ilDB->like("usr_data.login", "text", "%" . $a_user_filter . "%");
+            }
+            if($a_active_filter){
+                $where[] = "active = " . $ilDB->quote(1, 'integer');
             }
 
             // users

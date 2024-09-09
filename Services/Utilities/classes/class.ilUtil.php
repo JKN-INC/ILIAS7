@@ -3026,8 +3026,13 @@ class ilUtil
         }
 
         // JKN PATCH START
-        $a[$array_sortby] = iconv('UTF-8', 'ASCII//TRANSLIT', $a[$array_sortby]);
-        $b[$array_sortby] = iconv('UTF-8', 'ASCII//TRANSLIT', $b[$array_sortby]);
+        if (is_string($a[$array_sortby])) {
+            $a[$array_sortby] = iconv('UTF-8', 'ASCII//TRANSLIT', $a[$array_sortby]);
+        }
+
+        if (is_string($b[$array_sortby])) {
+            $b[$array_sortby] = iconv('UTF-8', 'ASCII//TRANSLIT', $b[$array_sortby]);
+        }
         // JKN PATCH END
 
         // this comparison should give optimal results if

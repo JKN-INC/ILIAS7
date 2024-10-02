@@ -62,8 +62,15 @@ class ilDclCreateViewTableGUI extends ilTable2GUI
         $field = $a_set->getFieldObject();
         $match = ilDclTableViewBaseDefaultValue::findSingle(intval($field->getDataTypeId()), $a_set->getId());
 
-        /** @var ilDclTextInputGUI $item */
-        $item = ilDclCache::getFieldRepresentation($field)->getInputField(new ilPropertyFormGUI());
+        // Do not carry this over with Ilias 8 Upgrade. This is a workaround for the comments field in Ilias 7
+        if($field->getId() === 'comments') {
+            $item = 'null';
+        }
+        else 
+        {
+            /** @var ilDclTextInputGUI $item */
+            $item = ilDclCache::getFieldRepresentation($field)->getInputField(new ilPropertyFormGUI());
+        }
 
         if (!is_null($match)) {
             if ($item instanceof ilDclCheckboxInputGUI) {

@@ -21,7 +21,6 @@ class Renderer extends AbstractComponentRenderer
          */
         $this->checkComponent($component);
         $tpl = $this->getTemplate("tpl.card.html", true, true);
-
         if ($component->getImage()) {
             $tpl->setVariable("IMAGE", $default_renderer->render($component->getImage()));
         }
@@ -37,6 +36,7 @@ class Renderer extends AbstractComponentRenderer
         if (!$id) {
             $id = $this->createId();
         }
+
         if (!empty($component->getTitleAction())) {
             if (is_string($component->getTitleAction())) {
                 $tpl->setCurrentBlock("title_action_begin");
@@ -96,7 +96,7 @@ class Renderer extends AbstractComponentRenderer
         }
 
         return $tpl->get();
-    }
+    } 
 
     /**
      * @inheritdocs

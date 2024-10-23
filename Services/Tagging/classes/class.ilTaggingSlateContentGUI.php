@@ -195,6 +195,7 @@ class ilTaggingSlateContentGUI
         $objs = ilTagging::getObjectsForTagAndUser($ilUser->getId(), $tag);
 
         $f = $this->ui->factory();
+        var_dump($f);
         $item_groups = [];
         $items = [];
         foreach ($objs as $key => $obj) {
@@ -213,6 +214,8 @@ class ilTaggingSlateContentGUI
                 )->withLeadIcon($f->symbol()->icon()->custom(ilObject::_getIcon($obj["obj_id"]), $title));
             }
         }
+        var_dump($items);
+        die();
         $item_groups[] = $f->item()->group(sprintf(
             $lng->txt("tagging_resources_for_tag"),
             "<i>" . ilUtil::secureString($tag) . "</i>"

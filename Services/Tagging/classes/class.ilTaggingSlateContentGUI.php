@@ -213,6 +213,7 @@ class ilTaggingSlateContentGUI
                 )->withLeadIcon($f->symbol()->icon()->custom(ilObject::_getIcon($obj["obj_id"]), $title));
             }
         }
+
         $item_groups[] = $f->item()->group(sprintf(
             $lng->txt("tagging_resources_for_tag"),
             "<i>" . ilUtil::secureString($tag) . "</i>"

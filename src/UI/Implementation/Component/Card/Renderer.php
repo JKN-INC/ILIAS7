@@ -21,9 +21,11 @@ class Renderer extends AbstractComponentRenderer
          */
         $this->checkComponent($component);
         $tpl = $this->getTemplate("tpl.card.html", true, true);
+        
         if ($component->getImage()) {
             $tpl->setVariable("IMAGE", $default_renderer->render($component->getImage()));
         }
+        
         if ($component->isHighlighted()) {
             $tpl->touchBlock("highlight");
         } else {
@@ -93,7 +95,6 @@ class Renderer extends AbstractComponentRenderer
 
             $tpl->parseCurrentBlock();
         }
-
         return $tpl->get();
     }
 

@@ -4007,7 +4007,7 @@ class ilObjectListGUI
                 $image = $image->withAction($card_title_action);
             }
         }
-
+        //updating the call for the icon to reflect if there is a custom icon. This was updated in future ILIAS Versions
         $card = $ui->factory()->card()->repositoryObject(
             $title . '<span data-list-item-id="' . $this->getUniqueItemId(true) . '"></span>',
             $image

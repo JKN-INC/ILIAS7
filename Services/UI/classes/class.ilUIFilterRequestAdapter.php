@@ -84,7 +84,6 @@ class ilUIFilterRequestAdapter
      */
     public function getAction(string $base_action, string $filter_cmd, $non_asynch = false) : string
     {
-        
         if ($non_asynch) {
             $base_action = str_replace("cmdMode=asynch", "", $base_action);
         }

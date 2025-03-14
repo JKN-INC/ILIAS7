@@ -203,7 +203,7 @@ class ilLPObjSettings
     public function cloneSettings($a_new_obj_id)
     {
         global $DIC;
-        $il = $DIC["il"];
+        $il = $DIC["ilDB"];
 
         $query = "INSERT INTO ut_lp_settings (obj_id,obj_type,u_mode,visits) " .
             "VALUES( " .
@@ -288,7 +288,6 @@ class ilLPObjSettings
     {
         global $DIC;
         $ilDB = $DIC['ilDB'];
-
         $query = "INSERT INTO ut_lp_settings (obj_id,obj_type,u_mode,visits) " .
             "VALUES(" .
             $ilDB->quote($this->getObjId(), 'integer') . ", " .

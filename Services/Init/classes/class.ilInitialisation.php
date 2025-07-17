@@ -1977,7 +1977,6 @@ class ilInitialisation
     protected static function translateMessage($a_message_id, array $a_message_static = null)
     {
         global $ilDB, $lng, $ilSetting, $ilClientIniFile, $ilUser;
-
         // current language
         if (!$lng) {
             $lang = "en";

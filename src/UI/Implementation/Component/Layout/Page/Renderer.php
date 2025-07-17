@@ -30,7 +30,7 @@ class Renderer extends AbstractComponentRenderer
     protected function renderStandardPage(Component\Layout\Page\Standard $component, RendererInterface $default_renderer)
     {
         $tpl = $this->getTemplate("tpl.standardpage.html", true, true);
-
+        
         if ($component->hasMetabar()) {
             $tpl->setVariable('METABAR', $default_renderer->render($component->getMetabar()));
         }

@@ -131,8 +131,43 @@ class ilCalendarSchedule
             $this->addFilter(new ilCalendarScheduleFilterExercise($this->user->getId()));
             $this->addFilter(new ilCalendarScheduleFilterTimings($this->user->getId()));
         }
+
+ 
+        // Add the new filter for registered sessions
+      
+        if(!$this->isAdmin()) {
+           require_once __DIR__ . '/class.ilCalendarScheduleFilterRegisteredSessions.php';
+          $this->addFilter(new ilCalendarScheduleFilterRegisteredSessions($this->user->getId()));
+        }
+      
     }
-    
+
+    public function isAdmin(): bool
+    {
+        global $DIC;
+
+        $roles = [
+            "PA" => "Portal Administrator",
+            "A"  => "Administrator"
+        ];
+
+        $role_ids = [];
+        foreach ($roles as $role) {
+            $role_id = $DIC->rbac()->review()->roleExists($role);
+            if ($role_id) {
+                $role_ids[] = $role_id;
+            }
+        }
+
+        if (empty($role_ids)) {
+            return false;
+        }
+
+        return $DIC->rbac()->review()->isAssignedToAtLeastOneGivenRole(
+            $DIC->user()->getId(),
+            $role_ids
+        );
+    }
     /**
      * Check if events are limited
      * @return type
@@ -450,7 +485,7 @@ class ilCalendarSchedule
         global $DIC;
 
         $ilDB = $DIC['ilDB'];
-        
+     
         include_once('./Services/Calendar/classes/class.ilCalendarCategories.php');
         $cats = ilCalendarCategories::_getInstance($this->user->getId())->getCategories($this->enabledSubitemCalendars());
         $cats = $this->filterCategories($cats);
@@ -488,7 +523,7 @@ class ilCalendarSchedule
                 $events[] = $valid_event;
             }
         }
-        
+
         foreach ($this->addCustomEvents($this->start, $this->end, $cats) as $event) {
             $events[] = $event;
         }

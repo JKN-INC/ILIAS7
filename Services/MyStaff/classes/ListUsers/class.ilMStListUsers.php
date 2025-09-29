@@ -53,27 +53,43 @@ class ilMStListUsers
         $options = array_merge($_options, $options);
 
         $select = 'SELECT
-				   usr_id,
-				   login,
-				   gender,
-	               firstname,
-	               lastname,
-	               title,
-	               institution,
-	               department,
-	               street,
-	               zipcode,
-	               city,
-	               country,
-	               sel_country,
-	               hobby,
-	               email,
-	               second_email,
-	               matriculation,
-	               active
-	               FROM ' . $this->dic->database()->quoteIdentifier('usr_data') .
+				   usr_data.usr_id,
+				   usr_data.login,
+				   usr_data.gender,
+	               usr_data.firstname,
+	               usr_data.lastname,
+	               usr_data.title,
+	               usr_data.institution,
+	               usr_data.department,
+	               usr_data.street,
+	               usr_data.zipcode,
+	               usr_data.city,
+	               usr_data.country,
+	               usr_data.sel_country,
+	               usr_data.hobby,
+	               usr_data.email,
+	               usr_data.second_email,
+	               usr_data.matriculation,
+	               usr_data.active';
 
-            self::createWhereStatement($arr_usr_ids, $options['filters']);
+        // Add org_units field for sorting if needed
+        $org_units_sort = false;
+        if (isset($options['sort']['field']) && $options['sort']['field'] === 'org_units') {
+            $org_units_sort = true;
+            // Use the existing temporary table approach
+            require_once('./Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php');
+            \ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
+            $select .= ', orgu_usr_assignements.path as org_units_paths';
+        }
+
+        $select .= ' FROM ' . $this->dic->database()->quoteIdentifier('usr_data');
+
+        // Add org units join for sorting
+        if ($org_units_sort) {
+            $select .= ' LEFT JOIN orgu_usr_assignements ON usr_data.usr_id = orgu_usr_assignements.user_id';
+        }
+
+        $select .= self::createWhereStatement($arr_usr_ids, $options['filters']);
 
         if ($options['count']) {
             $result = $this->dic->database()->query($select);
@@ -82,7 +98,11 @@ class ilMStListUsers
         }
 
         if ($options['sort']) {
-            $select .= " ORDER BY " . $options['sort']['field'] . " " . $options['sort']['direction'];
+            if ($options['sort']['field'] === 'org_units') {
+                $select .= " ORDER BY org_units_paths " . $options['sort']['direction'];
+            } else {
+                $select .= " ORDER BY usr_data." . $options['sort']['field'] . " " . $options['sort']['direction'];
+            }
         }
 
         if (isset($options['limit']['start']) && isset($options['limit']['end'])) {

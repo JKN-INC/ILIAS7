@@ -310,7 +310,13 @@ class ilUserTableGUI extends ilTable2GUI
         unset($additional_fields["second_email"]);
         unset($additional_fields["last_login"]);
         unset($additional_fields["access_until"]);
-        unset($additional_fields['org_units']);
+        $org_units_sort = false;
+        if ($this->getOrderField() === 'org_units') {
+            $org_units_sort = true;
+            unset($additional_fields['org_units']);
+        } else {
+            unset($additional_fields['org_units']);
+        }
 
         $udf_filter = array();
         foreach ($this->filter as $k => $v) {
@@ -321,7 +327,9 @@ class ilUserTableGUI extends ilTable2GUI
 
         $query = new ilUserQuery();
         $order_field = $this->getOrderField();
-        if (substr($order_field, 0, 4) != "udf_" || isset($additional_fields[$order_field])) {
+        
+        if ($org_units_sort) {
+        } elseif (substr($order_field, 0, 4) != "udf_" || isset($additional_fields[$order_field])) {
             $query->setOrderField($order_field);
             $query->setOrderDirection($this->getOrderDirection());
         }
@@ -372,6 +380,17 @@ class ilUserTableGUI extends ilTable2GUI
                 $usr_data["set"][$k]["access_class"] = "smallred";
             }
             $usr_data["set"][$k]["access_until"] = $txt_access;
+        }
+
+        if ($org_units_sort && in_array('org_units', $this->getSelectedColumns())) {
+            $direction = $this->getOrderDirection();
+            usort($usr_data["set"], function($a, $b) use ($direction) {
+                $orgA = isset($a['org_units']) ? $a['org_units'] : '';
+                $orgB = isset($b['org_units']) ? $b['org_units'] : '';
+                
+                $result = strcasecmp($orgA, $orgB);
+                return ($direction === 'desc') ? -$result : $result;
+            });
         }
 
         $this->setMaxCount($usr_data["cnt"]);

@@ -281,14 +281,16 @@ class ilLearningProgressBaseGUI
                             $a_active == self::LP_ACTIVE_GRADEBYSTUDENT
                         );
                     } else {
-                        $this->tabs_gui->addSubTabTarget(
-                            "trac_summary",
-                            $this->ctrl->getLinkTargetByClass("illplistofobjectsgui", 'showObjectSummary'),
-                            "",
-                            "",
-                            "",
-                            $a_active == self::LP_ACTIVE_SUMMARY
-                        );
+                        if ($has_read) {
+                            $this->tabs_gui->addSubTabTarget(
+                                "trac_summary",
+                                $this->ctrl->getLinkTargetByClass("illplistofobjectsgui", 'showObjectSummary'),
+                                "",
+                                "",
+                                "",
+                                $a_active == self::LP_ACTIVE_SUMMARY
+                            );
+                        }
                     }
                     // END PATCH GRADEBOOK CPKN
                     
